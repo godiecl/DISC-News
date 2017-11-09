@@ -21,6 +21,12 @@ android {
         versionName "${VERSION_NAME} ${BUILD_DATE_TIME}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
     buildTypes {
         release {
             postprocessing {
@@ -94,8 +100,8 @@ dependencies {
     testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
     // Logback Android core module
-    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
-    implementation('com.github.tony19:logback-android-classic:1.1.1-6') {
+    runtimeOnly 'com.github.tony19:logback-android-core:1.1.1-6'
+    runtimeOnly('com.github.tony19:logback-android-classic:1.1.1-6') {
         // workaround issue #73
         exclude group: 'com.google.android', module: 'android'
     }
@@ -106,5 +112,11 @@ dependencies {
     // Lombok Android
     annotationProcessor 'org.projectlombok:lombok:1.16.18'
     compileOnly 'org.projectlombok:lombok:1.16.18'
+
+    // GSON to JSON converter
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+    // Cliente http
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
 
 }
