@@ -16,6 +16,10 @@ buildscript {
 }
 
 allprojects {
+
+    // buildDir = "${System.env.TEMP}//gradle-build//${rootProject.name}//${project.name}"
+    logger.lifecycle("Using buildDir: {}", buildDir)
+
     repositories {
         google()
         jcenter()
