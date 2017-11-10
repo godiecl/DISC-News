@@ -1,24 +1,43 @@
 package com.durrutia.dnews.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import com.durrutia.dnews.R;
 import com.durrutia.dnews.model.Article;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author durrutia on 2017-11-09.
  */
+@Slf4j
 public final class ArticleAdapter extends BaseAdapter {
 
     /**
      * Listado de Articulo
      */
     private final List<Article> articles = new ArrayList<>();
+
+    /**
+     * Inflater
+     */
+    private final LayoutInflater layoutInflater;
+
+    /**
+     *
+     * @param context
+     */
+    public ArticleAdapter(final Context context) {
+        this.layoutInflater = LayoutInflater.from(context);
+    }
 
     /**
      * How many items are in the data set represented by this Adapter.
@@ -38,7 +57,7 @@ public final class ArticleAdapter extends BaseAdapter {
      * @return The data at the specified position.
      */
     @Override
-    public Object getItem(int position) {
+    public Article getItem(int position) {
         return articles.get(position);
     }
 
@@ -73,7 +92,26 @@ public final class ArticleAdapter extends BaseAdapter {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+
+        final ViewHolder viewHolder;
+        final View view;
+
+        if (convertView == null) {
+            view = this.layoutInflater.inflate(R.layout.row_article, parent, false);
+            viewHolder = new ViewHolder(view);
+            view.setTag(viewHolder);
+        } else {
+            view = convertView;
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        final Article article = this.getItem(position);
+        if (article != null) {
+            viewHolder.title.setText(article.getTitle());
+            viewHolder.description.setText(article.getDescription());
+        }
+
+        return view;
     }
 
     /**
@@ -81,10 +119,34 @@ public final class ArticleAdapter extends BaseAdapter {
      * @param articles
      * @return ArticleAdapter
      */
-    public ArticleAdapter articles(final List<Article> articles) {
+    public void addAll(final List<Article> articles) {
+
+        boolean changed = false;
+
+        // Agrego los articulos
         if (articles != null) {
-            this.articles.addAll(articles);
+            changed = this.articles.addAll(articles);
+            log.debug("Added {} articles.", articles.size());
         }
-        return this;
+
+        // Si cambio la coleccion, se refresca.
+        if (changed) {
+            super.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Viewholder pattern
+     */
+    private static class ViewHolder {
+
+        TextView title;
+        TextView description;
+
+        public ViewHolder(final View view) {
+            this.title = view.findViewById(R.id.ra_title);
+            this.description = view.findViewById(R.id.ra_description);
+        }
+
     }
 }

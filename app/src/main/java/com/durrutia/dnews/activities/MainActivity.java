@@ -7,9 +7,11 @@
 package com.durrutia.dnews.activities;
 
 import android.app.ListActivity;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import com.durrutia.dnews.adapters.ArticleAdapter;
+import com.durrutia.dnews.tasks.GetArticlesTask;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +24,9 @@ public class MainActivity extends ListActivity {
     /**
      * Adapter
      */
-    private ArticleAdapter articleAdapter = new ArticleAdapter();
+    private ArticleAdapter articleAdapter;
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -33,7 +34,20 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         log.debug("onCreate.");
-        this.setListAdapter(articleAdapter);
+
+        int[] colors = { 0, 0xFFFF0000, 0} ;
+        this.getListView().setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
+        this.getListView().setDividerHeight(5);
+
+        // Adaptador
+        this.articleAdapter = new ArticleAdapter(this);
+        super.setListAdapter(this.articleAdapter);
+
+        // Background task
+        final GetArticlesTask getArticlesTask = new GetArticlesTask(this.articleAdapter);
+
+        // Execute order 1313!
+        getArticlesTask.execute();
 
     }
 }
