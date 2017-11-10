@@ -6,10 +6,10 @@
 
 package com.durrutia.dnews.activities;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 
-import com.durrutia.dnews.R;
+import com.durrutia.dnews.adapters.ArticleAdapter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +17,12 @@ import lombok.extern.slf4j.Slf4j;
  * @author Diego Urrutia Astorga
  */
 @Slf4j
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
+
+    /**
+     * Adapter
+     */
+    private ArticleAdapter articleAdapter = new ArticleAdapter();
 
     /**
      *
@@ -26,9 +31,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         log.debug("onCreate.");
+        this.setListAdapter(articleAdapter);
 
     }
 }
