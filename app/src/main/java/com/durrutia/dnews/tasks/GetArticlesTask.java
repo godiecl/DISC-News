@@ -18,6 +18,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,10 +33,9 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
     private ArticleAdapter articleAdapter;
 
     /**
-     *
-     * @param articleAdapter
+     * @param articleAdapter adaptador donde iran a parar los articulos.
      */
-    public GetArticlesTask(final ArticleAdapter articleAdapter) {
+    public GetArticlesTask(@NonNull  final ArticleAdapter articleAdapter) {
         this.articleAdapter = articleAdapter;
     }
 
@@ -89,6 +89,8 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
      */
     @Override
     protected void onPostExecute(List<Article> articles) {
+
+        // FIXME: Agregado para tener mas datos de los que se despliegan en la ventana
         this.articleAdapter.addAll(articles);
         this.articleAdapter.addAll(articles);
         this.articleAdapter.addAll(articles);
