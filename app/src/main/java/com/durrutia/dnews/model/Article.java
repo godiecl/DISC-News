@@ -10,32 +10,35 @@ package com.durrutia.dnews.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 /**
  * Clase generada via http://www.jsonschema2pojo.org/
  */
 @Builder
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public final class Article {
 
     @Getter
-    private String author;
+    String author;
 
     @Getter
-    private String title;
+    String title;
 
     @Getter
-    private String description;
+    String description;
 
     @Getter
-    private String url;
+    String url;
 
     @Getter
-    private String urlToImage;
+    String urlToImage;
 
     @Getter
-    private String publishedAt;
+    String publishedAt;
 
     @Override
     public String toString() {
