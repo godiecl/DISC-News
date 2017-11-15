@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MainActivity extends ListActivity {
 
     /**
-     * Adapter
+     * Adapter de {@link com.durrutia.dnews.model.Article}.
      */
     private ArticleAdapter articleAdapter;
 
@@ -33,21 +33,21 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log.debug("onCreate.");
-
+        // Row division
         int[] colors = { 0, 0xFFFF0000, 0} ;
         this.getListView().setDivider(new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, colors));
         this.getListView().setDividerHeight(5);
 
-        // Adaptador
+        // Adaptador de articles
         this.articleAdapter = new ArticleAdapter(this);
         super.setListAdapter(this.articleAdapter);
 
-        // Background task
+        // Background task: Get Articles from Internet
         final GetArticlesTask getArticlesTask = new GetArticlesTask(this.articleAdapter);
 
-        // Execute order 1313!
+        // Execute order 66 in background!
         getArticlesTask.execute();
 
     }
+
 }
