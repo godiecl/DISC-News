@@ -22,24 +22,46 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public final class Article {
 
+    /**
+     * Author
+     */
     @Getter
     String author;
 
+    /**
+     * Title
+     */
     @Getter
     String title;
 
+    /**
+     * Description
+     */
     @Getter
     String description;
 
+    /**
+     * URL: main link
+     */
     @Getter
     String url;
 
+    /**
+     * URL: link to image
+     */
     @Getter
     String urlToImage;
 
+    /**
+     * Date
+     * FIXME: Detect the format
+     */
     @Getter
     String publishedAt;
 
+    /**
+     * @return the String representation.
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
