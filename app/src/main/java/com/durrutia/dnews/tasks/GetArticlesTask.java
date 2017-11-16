@@ -90,11 +90,6 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
     @Override
     protected void onPostExecute(List<Article> articles) {
 
-        // FIXME: Agregado para tener mas datos de los que se despliegan en la ventana
-        this.articleAdapter.addAll(articles);
-        this.articleAdapter.addAll(articles);
-        this.articleAdapter.addAll(articles);
-        this.articleAdapter.addAll(articles);
         this.articleAdapter.addAll(articles);
     }
 
