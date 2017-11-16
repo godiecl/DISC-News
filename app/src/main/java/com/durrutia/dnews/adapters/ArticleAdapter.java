@@ -109,6 +109,7 @@ public final class ArticleAdapter extends BaseAdapter {
         if (article != null) {
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
+            viewHolder.date.setText(article.getPrettyPublishedAt());
         }
 
         return view;
@@ -142,10 +143,12 @@ public final class ArticleAdapter extends BaseAdapter {
 
         TextView title;
         TextView description;
+        TextView date;
 
         public ViewHolder(final View view) {
             this.title = view.findViewById(R.id.ra_title);
             this.description = view.findViewById(R.id.ra_description);
+            this.date = view.findViewById(R.id.ra_date);
         }
 
     }

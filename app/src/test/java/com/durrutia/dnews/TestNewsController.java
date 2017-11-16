@@ -41,6 +41,7 @@ public final class TestNewsController {
 
         for (final Article article : articles) {
             log.debug("Article: {}", article);
+            log.debug("Article Pretty: {}", article.getPrettyPublishedAt());
         }
 
         log.info("Test in: {}", stopWatch);

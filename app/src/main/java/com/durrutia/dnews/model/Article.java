@@ -9,11 +9,15 @@ package com.durrutia.dnews.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 /**
  * Clase generada via http://www.jsonschema2pojo.org/
@@ -53,11 +57,22 @@ public final class Article {
     String urlToImage;
 
     /**
-     * Date
-     * FIXME: Detect the format
+     * Date: 2017-11-16T19:40:25Z
      */
     @Getter
     String publishedAt;
+
+    /**
+     * Fecha
+     */
+    @Setter
+    @NonFinal
+    DateTime publishedAtDateTime;
+
+    /**
+     * Formateador de fecha
+     */
+    private static final PrettyTime PRETTY_TIME = new PrettyTime();
 
     /**
      * @return the String representation.
@@ -65,6 +80,16 @@ public final class Article {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    /**
+     * @return the PrettyTime
+     */
+    public String getPrettyPublishedAt() {
+        if (this.publishedAtDateTime == null) {
+            return null;
+        }
+        return PRETTY_TIME.format(this.publishedAtDateTime.toDate());
     }
 
 }

@@ -12,6 +12,9 @@ import com.durrutia.dnews.model.NewsApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -59,6 +62,12 @@ public final class ArticleController {
         final String json = response.body().string();
 
         final NewsApi newsApi = gson.fromJson(json, NewsApi.class);
+
+        // Fix de la fecha
+        for (final Article article : newsApi.getArticles()) {
+            final DateTime dateTime = ISODateTimeFormat.dateTimeNoMillis().parseDateTime(article.getPublishedAt());
+            // article.setPublishedAtDateTime(dateTime);
+        }
 
         return newsApi.getArticles();
 
