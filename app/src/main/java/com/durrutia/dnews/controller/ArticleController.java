@@ -66,7 +66,7 @@ public final class ArticleController {
         // Fix de la fecha
         for (final Article article : newsApi.getArticles()) {
             final DateTime dateTime = ISODateTimeFormat.dateTimeNoMillis().parseDateTime(article.getPublishedAt());
-            // article.setPublishedAtDateTime(dateTime);
+            article.setPublishedAtDateTime(dateTime);
         }
 
         return newsApi.getArticles();
