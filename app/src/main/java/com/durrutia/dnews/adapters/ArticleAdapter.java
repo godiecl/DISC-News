@@ -12,6 +12,8 @@ import com.durrutia.dnews.model.Article;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,11 @@ public final class ArticleAdapter extends BaseAdapter {
      * Listado de Articulo
      */
     private final List<Article> articles = new ArrayList<>();
+
+    /**
+     * Comparador de articulos
+     */
+    private final Comparator<Article> comparator = (a1, a2) -> a2.getPublishedAtDateTime().compareTo(a1.getPublishedAtDateTime());
 
     /**
      * Context
@@ -138,6 +145,9 @@ public final class ArticleAdapter extends BaseAdapter {
 
         // Si cambio la coleccion, se refresca.
         if (changed) {
+
+            Collections.sort(this.articles, this.comparator);
+
             super.notifyDataSetChanged();
         }
     }
@@ -158,7 +168,7 @@ public final class ArticleAdapter extends BaseAdapter {
             this.description = view.findViewById(R.id.ra_description);
             this.date = view.findViewById(R.id.ra_date);
             this.image = view.findViewById(R.id.ra_image);
-            this.source= view.findViewById(R.id.ra_source);
+            this.source = view.findViewById(R.id.ra_source);
         }
 
     }

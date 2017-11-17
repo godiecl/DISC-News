@@ -71,6 +71,7 @@ public final class Article {
     /**
      * Fecha
      */
+    @Getter
     @Setter
     @NonFinal
     DateTime publishedAtDateTime;
