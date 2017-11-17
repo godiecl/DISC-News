@@ -18,6 +18,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -25,6 +26,7 @@ import okhttp3.Response;
 /**
  * Clase Principal que contiene los metodos de acceso a las noticias.
  */
+@Slf4j
 public final class ArticleController {
 
     /**
@@ -36,9 +38,14 @@ public final class ArticleController {
             .create();
 
     /**
+     * API Key
+     */
+    private static final String apiKey = "8dd673e94a9e4086a41b4cde0b6aa1c5";
+
+    /**
      * URL desde donde se obtendran los {@link Article}.
      */
-    private static final String url = "https://newsapi.org/v1/articles?source=techcrunch&sortBy=latest&apiKey=638da3177b274f35a68cc0c539e4d294";
+    private static final String url = "https://newsapi.org/v2/top-headlines?";
 
     /**
      * Cliente OkHttp
@@ -50,11 +57,15 @@ public final class ArticleController {
      *
      * @return the {@link List} of {@link Article}.
      */
-    public List<Article> getArticles() throws IOException {
+    public List<Article> getArticles(final String source) throws IOException {
+
+        final String apiUrl = url + "sources=" + source + "&sortBy=latest&apiKey=" + apiKey;
+
+        log.debug("Using url: {}", apiUrl);
 
         // Peticion
         final Request request = new Request.Builder()
-                .url(url)
+                .url(apiUrl)
                 .build();
 
         // Respuesta
