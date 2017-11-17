@@ -25,6 +25,12 @@
         android:text="Description" />
 
     <TextView
+        android:id="@+id/ra_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description" />
+
+    <TextView
         android:id="@+id/ra_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

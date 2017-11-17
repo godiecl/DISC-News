@@ -12,6 +12,7 @@ import com.durrutia.dnews.model.NewsApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -59,9 +60,13 @@ public final class ArticleController {
      */
     public List<Article> getArticles(final String source) throws IOException {
 
+        // Cronometro
+        final StopWatch stopWatch = StopWatch.createStarted();
+
+        // URL to get news
         final String apiUrl = url + "sources=" + source + "&sortBy=latest&apiKey=" + apiKey;
 
-        log.debug("Using url: {}", apiUrl);
+        log.debug("Getting Articles, using url: {}", apiUrl);
 
         // Peticion
         final Request request = new Request.Builder()
@@ -76,13 +81,19 @@ public final class ArticleController {
 
         // Fix de la fecha
         for (final Article article : newsApi.getArticles()) {
-            final DateTime dateTime = ISODateTimeFormat.dateTimeNoMillis().parseDateTime(article.getPublishedAt());
-            article.setPublishedAtDateTime(dateTime);
+
+            // Fix en el caso de que no hayan fechas
+            if (article.getPublishedAt() != null) {
+                final DateTime dateTime = ISODateTimeFormat.dateTimeNoMillis().parseDateTime(article.getPublishedAt());
+                article.setPublishedAtDateTime(dateTime);
+            }
         }
 
-        return newsApi.getArticles();
-
+        try {
+            return newsApi.getArticles();
+        } finally {
+            log.debug("Articles in: {}", stopWatch);
+        }
     }
-
 
 }

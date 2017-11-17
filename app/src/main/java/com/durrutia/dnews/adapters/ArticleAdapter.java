@@ -111,6 +111,7 @@ public final class ArticleAdapter extends BaseAdapter {
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
             viewHolder.date.setText(article.getPrettyPublishedAt());
+            viewHolder.source.setText(article.getSource().getName());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
 
@@ -150,12 +151,14 @@ public final class ArticleAdapter extends BaseAdapter {
         TextView description;
         TextView date;
         SimpleDraweeView image;
+        TextView source;
 
         ViewHolder(final View view) {
             this.title = view.findViewById(R.id.ra_title);
             this.description = view.findViewById(R.id.ra_description);
             this.date = view.findViewById(R.id.ra_date);
             this.image = view.findViewById(R.id.ra_image);
+            this.source= view.findViewById(R.id.ra_source);
         }
 
     }

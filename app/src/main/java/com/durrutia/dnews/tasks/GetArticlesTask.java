@@ -66,7 +66,7 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
 
         try {
             // Obtengo los articles desde internet via el controlador
-            return articleController.getArticles("techcrunch");
+            return articleController.getArticles("techcrunch,ars-technica,engadget,buzzfeed,wired");
         } catch (IOException e) {
             return null;
         } finally {

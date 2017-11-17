@@ -35,9 +35,11 @@ public final class TestNewsController {
         log.debug("Starting test connection ..");
 
         final ArticleController nc = new ArticleController();
-        final List<Article> articles = nc.getArticles("techcrunch");
+        final List<Article> articles = nc.getArticles("techcrunch,ars-technica,engadget,buzzfeed,wired");
         Assertions.assertThat(articles).isNotNull();
         Assertions.assertThat(articles).isNotEmpty();
+
+        log.debug("Size: {}", articles.size());
 
         for (final Article article : articles) {
             log.debug("Article: {}", article);

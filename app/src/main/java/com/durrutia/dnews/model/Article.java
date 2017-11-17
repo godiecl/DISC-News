@@ -63,6 +63,12 @@ public final class Article {
     String publishedAt;
 
     /**
+     * Source
+     */
+    @Getter
+    Source source;
+
+    /**
      * Fecha
      */
     @Setter
@@ -90,6 +96,35 @@ public final class Article {
             return null;
         }
         return PRETTY_TIME.format(this.publishedAtDateTime.toDate());
+    }
+
+    /**
+     *
+     */
+    @Builder
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    public static final class Source {
+
+        /**
+         *
+         */
+        @Getter
+        String id;
+
+        /**
+         *
+         */
+        @Getter
+        String name;
+
+        /**
+         * @return the String representation.
+         */
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+        }
+
     }
 
 }
