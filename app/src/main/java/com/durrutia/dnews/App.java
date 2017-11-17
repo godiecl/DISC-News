@@ -7,6 +7,11 @@ package com.durrutia.dnews;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+
+import org.apache.commons.lang3.time.StopWatch;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,7 +27,19 @@ public final class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        log.debug("onCreate.");
+        // Timer
+        final StopWatch stopWatch = StopWatch.createStarted();
+
+        // Pipeline config
+        final ImagePipelineConfig imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .build();
+
+        // Initialize Fresco
+        Fresco.initialize(this, imagePipelineConfig);
+
+        // Timming
+        log.debug("Init in: {}", stopWatch);
 
     }
 

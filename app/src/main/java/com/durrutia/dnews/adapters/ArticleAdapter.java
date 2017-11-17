@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.durrutia.dnews.R;
 import com.durrutia.dnews.model.Article;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +28,15 @@ public final class ArticleAdapter extends BaseAdapter {
     private final List<Article> articles = new ArrayList<>();
 
     /**
-     * Inflater
+     * Context
      */
-    private final LayoutInflater layoutInflater;
+    private final Context context;
 
     /**
-     *
      * @param context
      */
     public ArticleAdapter(final Context context) {
-        this.layoutInflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     /**
@@ -97,7 +97,7 @@ public final class ArticleAdapter extends BaseAdapter {
         final View view;
 
         if (convertView == null) {
-            view = this.layoutInflater.inflate(R.layout.row_article, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.row_article, parent, false);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
@@ -107,15 +107,20 @@ public final class ArticleAdapter extends BaseAdapter {
 
         final Article article = this.getItem(position);
         if (article != null) {
+
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
             viewHolder.date.setText(article.getPrettyPublishedAt());
+
+            viewHolder.image.setImageURI(article.getUrlToImage());
+
         }
 
         return view;
     }
 
     /**
+     * Agrega un listado de articulos al {@link List} de {@link Article}.
      *
      * @param articles
      * @return ArticleAdapter
@@ -144,11 +149,13 @@ public final class ArticleAdapter extends BaseAdapter {
         TextView title;
         TextView description;
         TextView date;
+        SimpleDraweeView image;
 
-        public ViewHolder(final View view) {
+        ViewHolder(final View view) {
             this.title = view.findViewById(R.id.ra_title);
             this.description = view.findViewById(R.id.ra_description);
             this.date = view.findViewById(R.id.ra_date);
+            this.image = view.findViewById(R.id.ra_image);
         }
 
     }
