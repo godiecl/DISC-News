@@ -128,4 +128,9 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:1.5.0'
     implementation 'com.android.support:support-core-utils:26.1.0'
 
+    // DBFLow
+    annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.1.2'
+    implementation 'com.github.Raizlabs.DBFlow:dbflow-core:4.1.2'
+    implementation 'com.github.Raizlabs.DBFlow:dbflow:4.1.2'
+
 }

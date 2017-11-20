@@ -9,6 +9,9 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowLog;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -39,6 +42,13 @@ public final class App extends Application {
 
             // Initialize Fresco
             Fresco.initialize(this, imagePipelineConfig);
+        }
+
+        // DBFLow
+        {
+            // Initialize DBFLow
+            FlowManager.init(FlowConfig.builder(this).openDatabasesOnInit(true).build());
+            FlowLog.setMinimumLoggingLevel(FlowLog.Level.D);
         }
 
         // Timming

@@ -13,8 +13,6 @@ import com.durrutia.dnews.adapters.ArticleAdapter;
 import com.durrutia.dnews.controller.ArticleController;
 import com.durrutia.dnews.model.Article;
 
-import org.apache.commons.lang3.time.StopWatch;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -56,11 +54,6 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
     @Override
     protected List<Article> doInBackground(Void... voids) {
 
-        // Cronometro
-        final StopWatch stopWatch = StopWatch.createStarted();
-
-        log.debug("Running in background ..");
-
         // FIXME: Sera atributo de la clase?
         final ArticleController articleController = new ArticleController();
 
@@ -69,9 +62,6 @@ public final class GetArticlesTask extends AsyncTask<Void, Void, List<Article>> 
             return articleController.getArticles("techcrunch,ars-technica,engadget,buzzfeed,wired");
         } catch (IOException e) {
             return null;
-        } finally {
-            // Cuanto tiempo demoro?
-            log.debug("Background time: {}", stopWatch);
         }
 
     }
