@@ -10,20 +10,21 @@ package com.durrutia.dnews.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 
 /**
  * Clase generada via http://www.jsonschema2pojo.org/
  */
+// @Slf4j
 @Builder
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 public final class Article {
 
     /**
@@ -59,7 +60,6 @@ public final class Article {
     /**
      * Date: 2017-11-16T19:40:25Z
      */
-    @Getter
     String publishedAt;
 
     /**
@@ -72,14 +72,7 @@ public final class Article {
      * Fecha
      */
     @Getter
-    @Setter
-    @NonFinal
     DateTime publishedAtDateTime;
-
-    /**
-     * Formateador de fecha
-     */
-    private static final PrettyTime PRETTY_TIME = new PrettyTime();
 
     /**
      * @return the String representation.
@@ -90,17 +83,24 @@ public final class Article {
     }
 
     /**
-     * @return the PrettyTime
+     * Fix the article
+     *
+     * @param article to fix.
      */
-    public String getPrettyPublishedAt() {
-        if (this.publishedAtDateTime == null) {
-            return null;
+    public static void fix(final Article article) {
+
+        if (article.publishedAt != null) {
+
+            // Fixing date
+            article.publishedAtDateTime = EntityUtils.parse(article.publishedAt);
+
         }
-        return PRETTY_TIME.format(this.publishedAtDateTime.toDate());
+
     }
 
+
     /**
-     *
+     * Internal article source.
      */
     @Builder
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)

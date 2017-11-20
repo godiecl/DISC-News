@@ -7,6 +7,7 @@
 
 package com.durrutia.dnews;
 
+import com.durrutia.dnews.adapters.ArticleAdapter;
 import com.durrutia.dnews.controller.ArticleController;
 import com.durrutia.dnews.model.Article;
 
@@ -42,8 +43,9 @@ public final class TestNewsController {
         log.debug("Size: {}", articles.size());
 
         for (final Article article : articles) {
+
             log.debug("Article: {}", article);
-            log.debug("Article Pretty: {}", article.getPrettyPublishedAt());
+            log.debug("Article Pretty: {}", ArticleAdapter.PRETTY_TIME.format(article.getPublishedAtDateTime().toDate()));
         }
 
         log.info("Test in: {}", stopWatch);

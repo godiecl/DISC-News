@@ -13,8 +13,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,17 +80,17 @@ public final class ArticleController {
         // Fix de la fecha
         for (final Article article : newsApi.getArticles()) {
 
-            // Fix en el caso de que no hayan fechas
-            if (article.getPublishedAt() != null) {
-                final DateTime dateTime = ISODateTimeFormat.dateTimeNoMillis().parseDateTime(article.getPublishedAt());
-                article.setPublishedAtDateTime(dateTime);
-            }
+            // Fix del articulo
+            Article.fix(article);
+            // log.debug("DateFixed: {}", article.getPublishedAtDateTime());
+
         }
 
+        // Returning the data!
         try {
             return newsApi.getArticles();
         } finally {
-            log.debug("Articles in: {}", stopWatch);
+            log.debug("GetArticles in: {}", stopWatch);
         }
     }
 

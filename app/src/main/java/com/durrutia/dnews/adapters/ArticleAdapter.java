@@ -11,6 +11,8 @@ import com.durrutia.dnews.R;
 import com.durrutia.dnews.model.Article;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,6 +25,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public final class ArticleAdapter extends BaseAdapter {
+
+    /**
+     * Formateador de fecha
+     */
+    public static final PrettyTime PRETTY_TIME = new PrettyTime();
 
     /**
      * Listado de Articulo
@@ -117,7 +124,8 @@ public final class ArticleAdapter extends BaseAdapter {
 
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
-            viewHolder.date.setText(article.getPrettyPublishedAt());
+
+            viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAtDateTime().toDate()));
             viewHolder.source.setText(article.getSource().getName());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
@@ -139,6 +147,7 @@ public final class ArticleAdapter extends BaseAdapter {
 
         // Agrego los articulos
         if (articles != null) {
+            log.debug("Adding articles: {}", articles.size());
             changed = this.articles.addAll(articles);
             log.debug("Added {} articles.", articles.size());
         }

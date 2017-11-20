@@ -24,7 +24,6 @@ public final class TestArticle {
         Assertions.assertThat(article).isNotNull();
 
         Assertions.assertThat(article.getAuthor()).isNotBlank();
-        Assertions.assertThat(article.getPublishedAt()).isNull();
 
     }
 
