@@ -30,16 +30,19 @@ public final class App extends Application {
         // Timer
         final StopWatch stopWatch = StopWatch.createStarted();
 
-        // Pipeline config
-        final ImagePipelineConfig imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
-                .setDownsampleEnabled(true)
-                .build();
+        // Facebook Fresco
+        {
+            // Pipeline config
+            final ImagePipelineConfig imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
+                    .setDownsampleEnabled(true)
+                    .build();
 
-        // Initialize Fresco
-        Fresco.initialize(this, imagePipelineConfig);
+            // Initialize Fresco
+            Fresco.initialize(this, imagePipelineConfig);
+        }
 
         // Timming
-        log.debug("Init in: {}", stopWatch);
+        log.debug("Initialization in: {}", stopWatch);
 
     }
 
