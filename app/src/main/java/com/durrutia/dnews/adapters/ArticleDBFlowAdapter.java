@@ -150,6 +150,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
 
             viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAt()));
             viewHolder.source.setText(article.getSource().getName());
+            viewHolder.uuid.setText(article.getId().toString());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
 
@@ -168,6 +169,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
         TextView date;
         SimpleDraweeView image;
         TextView source;
+        TextView uuid;
 
         ViewHolder(final View view) {
             this.title = view.findViewById(R.id.ra_title);
@@ -175,6 +177,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
             this.date = view.findViewById(R.id.ra_date);
             this.image = view.findViewById(R.id.ra_image);
             this.source = view.findViewById(R.id.ra_source);
+            this.uuid = view.findViewById(R.id.ra_uuid);
         }
 
     }

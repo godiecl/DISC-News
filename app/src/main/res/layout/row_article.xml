@@ -36,4 +36,10 @@
         android:layout_height="wrap_content"
         android:text="A minute ago" />
 
+    <TextView
+        android:id="@+id/ra_uuid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="123e4567-e89b-12d3-a456-426655440000" />
+
 </LinearLayout>
