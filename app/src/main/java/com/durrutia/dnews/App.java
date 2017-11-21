@@ -8,6 +8,7 @@ package com.durrutia.dnews;
 import android.app.Application;
 
 import com.durrutia.dnews.dao.AppDatabase;
+import com.facebook.device.yearclass.YearClass;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
@@ -53,6 +54,12 @@ public final class App extends Application {
                     // .openDatabasesOnInit(true)
                     .build()
             );
+        }
+
+        // Device-Year
+        {
+            int year = YearClass.get(this);
+            log.debug("Year detected: {}", year);
         }
 
         // Timming
