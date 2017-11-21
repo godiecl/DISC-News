@@ -69,6 +69,8 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
         // Fresh the SQL
         this.flowCursorList.refresh();
 
+        log.debug("Size: {}", this.flowCursorList.getCount());
+
         // Notify the list
         super.notifyDataSetChanged();
 
