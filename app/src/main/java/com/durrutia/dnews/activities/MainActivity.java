@@ -129,16 +129,21 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
         Toast.makeText(this, "Downloading Articles ..", Toast.LENGTH_LONG).show();
 
         log.debug("Starting GetSaveArticlesTask ..");
-        this.getSaveArticlesTask = new GetSaveArticlesTask();
-        this.getSaveArticlesTask.execute(this);
+        this.getSaveArticlesTask = new GetSaveArticlesTask(this);
+        this.getSaveArticlesTask.execute();
 
     }
 
     /**
-     * GetSaveArticlesTask terminated
+     * Aviso que se termino la obtencion de los {@link com.durrutia.dnews.model.Article}.
+     *
+     * @param newsArticles
      */
     @Override
-    public void taskFinished() {
+    public void taskFinished(int newsArticles) {
+
+        // Show little message
+        Toast.makeText(this, "New Articles: " + newsArticles, Toast.LENGTH_LONG).show();
 
         log.debug("Finished!");
         this.articleAdapter.notifyDataSetChanged();

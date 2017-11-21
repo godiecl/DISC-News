@@ -3,10 +3,9 @@ package com.durrutia.dnews.tasks;
 import android.os.AsyncTask;
 
 import com.durrutia.dnews.controller.ArticleController;
-import com.durrutia.dnews.dao.AppDatabase;
 import com.durrutia.dnews.model.Article;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
+import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -19,7 +18,19 @@ import lombok.extern.slf4j.Slf4j;
  * @author Diego Urrutia Astorga
  */
 @Slf4j
-public final class GetSaveArticlesTask extends AsyncTask<GetSaveArticlesTask.TaskListener, Void, GetSaveArticlesTask.TaskListener> {
+public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
+
+    /**
+     *
+     */
+    private TaskListener taskListener;
+
+    /**
+     * @param taskListener
+     */
+    public GetSaveArticlesTask(TaskListener taskListener) {
+        this.taskListener = taskListener;
+    }
 
     /**
      * Override this method to perform a computation on a background thread. The
@@ -29,14 +40,14 @@ public final class GetSaveArticlesTask extends AsyncTask<GetSaveArticlesTask.Tas
      * This method can call {@link #publishProgress} to publish updates
      * on the UI thread.
      *
-     * @param taskListeners The parameters of the task.
+     * @param voids The parameters of the task.
      * @return A result, defined by the subclass of this task.
      * @see #onPreExecute()
      * @see #onPostExecute
      * @see #publishProgress
      */
     @Override
-    protected TaskListener doInBackground(TaskListener... taskListeners) {
+    protected Integer doInBackground(Void... voids) {
 
         // Getting from Internet
         final List<Article> articles = getArticles();
@@ -44,23 +55,37 @@ public final class GetSaveArticlesTask extends AsyncTask<GetSaveArticlesTask.Tas
         // Saving in database
         if (articles != null && articles.size() != 0) {
 
+            log.debug("Saving {} Articles in database ..", articles.size());
+
             // Cronometro
             final StopWatch stopWatch = StopWatch.createStarted();
 
-            log.debug("Saving models in database ..");
+            final ModelAdapter<Article> modelAdapter = FlowManager.getModelAdapter(Article.class);
+
+            int saved = 0;
+            for (final Article article : articles) {
+
+                if (modelAdapter.exists(article)) {
+                    continue;
+                }
+
+                modelAdapter.insert(article);
+                saved++;
+
+            }
+            log.debug("Saved {} new Articles in {}.", saved, stopWatch);
+
+            return saved;
+
+            /*
             FastStoreModelTransaction<Article> fastStoreModelTransaction = FastStoreModelTransaction.saveBuilder(FlowManager.getModelAdapter(Article.class))
                     .addAll(articles).build();
 
             fastStoreModelTransaction.execute(FlowManager.getWritableDatabase(AppDatabase.class));
-
-            log.debug("Saved {} articles in {}.", articles.size(), stopWatch);
+           */
 
         }
 
-        // Return the listener!
-        if (taskListeners != null && taskListeners.length > 0) {
-            return taskListeners[0];
-        }
         return null;
 
     }
@@ -81,23 +106,24 @@ public final class GetSaveArticlesTask extends AsyncTask<GetSaveArticlesTask.Tas
         }
     }
 
-
     /**
      * <p>Runs on the UI thread after {@link #doInBackground}. The
      * specified result is the value returned by {@link #doInBackground}.</p>
      * <p>
      * <p>This method won't be invoked if the task was cancelled.</p>
      *
-     * @param taskListener The result of the operation computed by {@link #doInBackground}.
+     * @param integer The result of the operation computed by {@link #doInBackground}.
      * @see #onPreExecute
      * @see #doInBackground
      * @see #onCancelled(Object)
      */
     @Override
-    protected void onPostExecute(final TaskListener taskListener) {
+    protected void onPostExecute(Integer integer) {
+
         if (taskListener != null) {
-            taskListener.taskFinished();
+            taskListener.taskFinished(integer);
         }
+
     }
 
     /**
@@ -106,9 +132,9 @@ public final class GetSaveArticlesTask extends AsyncTask<GetSaveArticlesTask.Tas
     public interface TaskListener {
 
         /**
-         *
+         * Aviso que se termino la obtencion de los {@link Article}.
          */
-        void taskFinished();
+        void taskFinished(final int newsArticles);
 
     }
 
