@@ -136,4 +136,7 @@ dependencies {
     // Device-Year
     implementation 'com.facebook.device.yearclass:yearclass:2.0.0'
 
+    // https://github.com/square/seismic
+    implementation 'com.squareup:seismic:1.0.2'
+
 }

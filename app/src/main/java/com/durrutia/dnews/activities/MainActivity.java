@@ -8,11 +8,14 @@ package com.durrutia.dnews.activities;
 
 import android.app.ListActivity;
 import android.graphics.drawable.GradientDrawable;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.durrutia.dnews.adapters.ArticleDBFlowAdapter;
 import com.durrutia.dnews.tasks.GetSaveArticlesTask;
+import com.squareup.seismic.ShakeDetector;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,12 +23,22 @@ import lombok.extern.slf4j.Slf4j;
  * @author Diego Urrutia Astorga
  */
 @Slf4j
-public final class MainActivity extends ListActivity implements GetSaveArticlesTask.TaskListener {
+public final class MainActivity extends ListActivity implements GetSaveArticlesTask.TaskListener, ShakeDetector.Listener {
 
     /**
      * Adapter de {@link com.durrutia.dnews.model.Article}.
      */
     private BaseAdapter articleAdapter;
+
+    /**
+     * Running background task
+     */
+    private GetSaveArticlesTask getSaveArticlesTask;
+
+    /**
+     * Shake Detector
+     */
+    private ShakeDetector shakeDetector;
 
     /**
      * @param savedInstanceState
@@ -50,10 +63,73 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
         // getArticlesTask.execute();
 
         if (this.articleAdapter.isEmpty()) {
-            log.debug("Adapter empty, running background task ..");
-            final GetSaveArticlesTask getSaveArticlesTask = new GetSaveArticlesTask();
-            getSaveArticlesTask.execute(this);
+            this.runGetAndSaveArticlesTask();
         }
+
+        this.shakeDetector = new ShakeDetector(this);
+
+    }
+
+    /**
+     * Called after {@link #onCreate} &mdash; or after {@link #onRestart} when
+     * the activity had been stopped, but is now again being displayed to the
+     * user.  It will be followed by {@link #onResume}.
+     * <p>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onCreate
+     * @see #onStop
+     * @see #onResume
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        shakeDetector.start(sensorManager);
+
+    }
+
+    /**
+     * Called when you are no longer visible to the user.  You will next
+     * receive either {@link #onRestart}, {@link #onDestroy}, or nothing,
+     * depending on later user activity.
+     * <p>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onRestart
+     * @see #onResume
+     * @see #onSaveInstanceState
+     * @see #onDestroy
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        shakeDetector.stop();
+    }
+
+    /**
+     *
+     */
+    private void runGetAndSaveArticlesTask() {
+
+        if (this.getSaveArticlesTask != null) {
+            Toast.makeText(this, "Already downloading Articles ..", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show little message
+        Toast.makeText(this, "Downloading Articles ..", Toast.LENGTH_LONG).show();
+
+        log.debug("Starting GetSaveArticlesTask ..");
+        this.getSaveArticlesTask = new GetSaveArticlesTask();
+        this.getSaveArticlesTask.execute(this);
+
     }
 
     /**
@@ -61,7 +137,23 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
      */
     @Override
     public void taskFinished() {
+
         log.debug("Finished!");
         this.articleAdapter.notifyDataSetChanged();
+
+        // Clean the task!
+        this.getSaveArticlesTask = null;
+
     }
+
+    /**
+     * Called on the main thread when the device is shaken.
+     */
+    @Override
+    public void hearShake() {
+        this.runGetAndSaveArticlesTask();
+    }
+
+
+
 }
