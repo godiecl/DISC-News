@@ -7,9 +7,11 @@
 package com.durrutia.dnews.activities;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
@@ -151,6 +153,12 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
      */
     @Override
     public void hearShake() {
+
+        Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null) {
+            vibrator.vibrate(150);
+        }
+
         this.runGetAndSaveArticlesTask();
     }
 
