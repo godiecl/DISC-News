@@ -8,7 +8,6 @@
 package com.durrutia.dnews.model;
 
 import com.durrutia.dnews.dao.AppDatabase;
-import com.durrutia.dnews.dao.DateTimeConverter;
 import com.durrutia.dnews.dao.SourceConverter;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -16,8 +15,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.joda.time.DateTime;
 
+import java.util.Date;
 import java.util.UUID;
 
 import lombok.AccessLevel;
@@ -82,7 +81,9 @@ public final class Article {
     /**
      * Date: 2017-11-16T19:40:25Z
      */
-    String publishedAt;
+    @Getter
+    @Column
+    Date publishedAt;
 
     /**
      * Source
@@ -90,13 +91,6 @@ public final class Article {
     @Getter
     @Column(typeConverter = SourceConverter.class)
     Source source;
-
-    /**
-     * Fecha
-     */
-    @Getter
-    @Column(typeConverter = DateTimeConverter.class)
-    DateTime publishedAtDateTime;
 
     /**
      * @return the String representation.
@@ -113,15 +107,13 @@ public final class Article {
      */
     public static void fix(final Article article) {
 
-        if (article.publishedAt != null) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(article.title);
+        sb.append("-");
+        sb.append(article.publishedAt);
 
-            // Fixing date
-            article.publishedAtDateTime = EntityUtils.parse(article.publishedAt);
-
-            // Output the date time in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSSZZ)
-            article.publishedAt = article.publishedAtDateTime.toString();
-
-        }
+        // Calculate ID from title + publishedAt
+        article.id = UUID.nameUUIDFromBytes(sb.toString().getBytes());
 
     }
 

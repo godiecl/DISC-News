@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.durrutia.dnews.R;
 import com.durrutia.dnews.model.Article;
+import com.durrutia.dnews.model.Article_Table;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.sql.language.OrderBy;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -47,8 +49,11 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
 
         this.context = context;
 
-        this.flowCursorList = new FlowCursorList.Builder<>(SQLite.select().from(Article.class))
-                .build();
+        this.flowCursorList = new FlowCursorList.Builder<>(
+                SQLite.select()
+                        .from(Article.class)
+                        .orderBy(OrderBy.fromProperty(Article_Table.publishedAt))
+        ).build();
 
         log.debug("Size: {}", this.flowCursorList.getCount());
 
@@ -141,7 +146,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
 
-            viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAtDateTime().toDate()));
+            viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAt()));
             viewHolder.source.setText(article.getSource().getName());
 
             viewHolder.image.setImageURI(article.getUrlToImage());

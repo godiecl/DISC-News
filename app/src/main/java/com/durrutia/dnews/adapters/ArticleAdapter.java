@@ -14,8 +14,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +33,6 @@ public final class ArticleAdapter extends BaseAdapter {
      * Listado de Articulo
      */
     private final List<Article> articles = new ArrayList<>();
-
-    /**
-     * Comparador de articulos
-     */
-    private final Comparator<Article> comparator = (a1, a2) -> a2.getPublishedAtDateTime().compareTo(a1.getPublishedAtDateTime());
 
     /**
      * Context
@@ -125,7 +118,7 @@ public final class ArticleAdapter extends BaseAdapter {
             viewHolder.title.setText(article.getTitle());
             viewHolder.description.setText(article.getDescription());
 
-            viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAtDateTime().toDate()));
+            viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAt()));
             viewHolder.source.setText(article.getSource().getName());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
@@ -154,8 +147,6 @@ public final class ArticleAdapter extends BaseAdapter {
 
         // Si cambio la coleccion, se refresca.
         if (changed) {
-
-            Collections.sort(this.articles, this.comparator);
 
             super.notifyDataSetChanged();
         }

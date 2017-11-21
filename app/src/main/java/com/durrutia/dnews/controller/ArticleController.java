@@ -11,10 +11,17 @@ import com.durrutia.dnews.model.Article;
 import com.durrutia.dnews.model.NewsApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +40,7 @@ public final class ArticleController {
      */
     private static final Gson gson = new GsonBuilder()
             .serializeNulls()
+            .registerTypeAdapter(Article.class, new ArticleAdapter())
             .setPrettyPrinting() // TODO: Eliminar en modo produccion
             .create();
 
@@ -92,6 +100,51 @@ public final class ArticleController {
         } finally {
             log.debug("GetArticles in: {}", stopWatch);
         }
+    }
+
+    /**
+     * Des-Serializador de {@link Article} via adaptador.
+     */
+    public static class ArticleAdapter implements JsonDeserializer<Article> {
+
+        /**
+         * Gson invokes this call-back method during deserialization when it encounters a field of the
+         * specified type.
+         * <p>In the implementation of this call-back method, you should consider invoking
+         * {@link JsonDeserializationContext#deserialize(JsonElement, Type)} method to create objects
+         * for any non-trivial field of the returned object. However, you should never invoke it on the
+         * the same type passing {@code json} since that will cause an infinite loop (Gson will call your
+         * call-back method again).
+         *
+         * @param json    The Json data being deserialized
+         * @param typeOfT The type of the Object to deserialize to
+         * @param context
+         * @return a deserialized object of the specified type typeOfT which is a subclass of {@code T}
+         * @throws JsonParseException if json is not in the expected format of {@code typeofT}
+         */
+        @Override
+        public Article deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
+            final JsonObject jsonObject = json.getAsJsonObject();
+
+            final Date publishedAt = context.deserialize(jsonObject.get("publishedAt"), Date.class);
+
+            final Article article = Article.builder()
+                    .author(jsonObject.get("author").getAsString())
+                    .title(jsonObject.get("title").getAsString())
+                    .description(jsonObject.get("description").getAsString())
+                    .url(jsonObject.get("url").getAsString())
+                    .urlToImage(jsonObject.get("urlToImage").getAsString())
+                    .publishedAt(publishedAt)
+                    .source(context.deserialize(jsonObject.get("source"), Article.Source.class))
+                    .build();
+
+            Article.fix(article);
+
+            return article;
+        }
+
+
     }
 
 }
