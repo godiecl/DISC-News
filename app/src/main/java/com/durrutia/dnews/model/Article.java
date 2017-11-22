@@ -115,6 +115,9 @@ public final class Article {
         // Calculate ID from title + publishedAt
         article.id = UUID.nameUUIDFromBytes(sb.toString().getBytes());
 
+        if (article.author == null) {
+            article.author = "unknow";
+        }
     }
 
 

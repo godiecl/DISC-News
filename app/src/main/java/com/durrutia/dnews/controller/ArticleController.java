@@ -130,11 +130,11 @@ public final class ArticleController {
             final Date publishedAt = context.deserialize(jsonObject.get("publishedAt"), Date.class);
 
             final Article article = Article.builder()
-                    .author(jsonObject.get("author").getAsString())
-                    .title(jsonObject.get("title").getAsString())
-                    .description(jsonObject.get("description").getAsString())
-                    .url(jsonObject.get("url").getAsString())
-                    .urlToImage(jsonObject.get("urlToImage").getAsString())
+                    .author(getString(jsonObject, "author"))
+                    .title(getString(jsonObject , "title"))
+                    .description(getString(jsonObject, "description"))
+                    .url(getString(jsonObject, "url"))
+                    .urlToImage(getString(jsonObject,"urlToImage"))
                     .publishedAt(publishedAt)
                     .source(context.deserialize(jsonObject.get("source"), Article.Source.class))
                     .build();
@@ -142,6 +142,23 @@ public final class ArticleController {
             Article.fix(article);
 
             return article;
+        }
+
+        /**
+         *
+         * @param jsonObject
+         * @param key
+         * @return null or data if exists.
+         */
+        private String getString(final JsonObject jsonObject, final String key) {
+
+            final JsonElement json = jsonObject.get(key);
+
+            if (!json.isJsonNull()) {
+                return json.getAsString();
+            }
+
+            return null;
         }
 
 
