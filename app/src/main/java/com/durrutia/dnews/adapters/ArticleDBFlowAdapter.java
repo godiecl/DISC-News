@@ -149,7 +149,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
             viewHolder.description.setText(article.getDescription());
 
             viewHolder.date.setText(PRETTY_TIME.format(article.getPublishedAt()));
-            viewHolder.source.setText(article.getSource().getName());
+            viewHolder.source.setText(String.format("%s <%s>", article.getSource().getName(), article.getAuthor()));
             viewHolder.uuid.setText(article.getId().toString());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
