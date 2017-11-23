@@ -102,6 +102,7 @@ public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
             // Obtengo los articles desde internet via el controlador
             return articleController.getArticles("techcrunch,ars-technica,engadget,buzzfeed,wired");
         } catch (IOException e) {
+            log.error("Error", e);
             return null;
         }
     }
@@ -134,7 +135,7 @@ public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
         /**
          * Aviso que se termino la obtencion de los {@link Article}.
          */
-        void taskFinished(final int newsArticles);
+        void taskFinished(final Integer newsArticles);
 
     }
 

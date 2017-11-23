@@ -140,7 +140,7 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
      * @param newsArticles
      */
     @Override
-    public void taskFinished(int newsArticles) {
+    public void taskFinished(Integer newsArticles) {
 
         // Show little message
         Toast.makeText(this, "New Articles: " + newsArticles, Toast.LENGTH_LONG).show();
