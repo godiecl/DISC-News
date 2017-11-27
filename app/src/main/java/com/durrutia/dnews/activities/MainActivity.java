@@ -107,6 +107,9 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector.start(sensorManager);
 
+        // Show the database size!
+        Toast.makeText(this, "Articles in BD: " + this.articleAdapter.getCount(), Toast.LENGTH_SHORT).show();
+
     }
 
     /**
