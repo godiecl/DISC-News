@@ -22,6 +22,8 @@ import com.squareup.seismic.ShakeDetector;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Actividad principal: muesta una lista de articulos (noticias) obtenidas desde Internet.
+ *
  * @author Diego Urrutia Astorga
  */
 @Slf4j
@@ -58,16 +60,13 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
         this.articleAdapter = new ArticleDBFlowAdapter(this);
         super.setListAdapter(this.articleAdapter);
 
-        // Background task: Get Articles from Internet
-        // final GetArticlesTask getArticlesTask = new GetArticlesTask(this.articleAdapter);
-
-        // Execute order 66 in background!
-        // getArticlesTask.execute();
-
+        // Si no hay articulos en el adaptador (y por lo tanto en la base de datos) ..
         if (this.articleAdapter.isEmpty()) {
+            // .. ejecuto la tarea para obtenerlas.
             this.runGetAndSaveArticlesTask();
         }
 
+        // Detector de terremotos
         this.shakeDetector = new ShakeDetector(this);
 
     }
@@ -89,6 +88,7 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
     protected void onStart() {
         super.onStart();
 
+        // Al iniciar la aplicación, inicio la deteccion de terremotos
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         shakeDetector.start(sensorManager);
 
@@ -112,14 +112,17 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
     protected void onStop() {
         super.onStop();
 
+        // Detengo el detector de sismos
         shakeDetector.stop();
     }
 
     /**
-     *
+     * Metodo que realiza la ejecucion en segundo plano de la tarea que obtiene los
+     * {@link com.durrutia.dnews.model.Article} desde Internet.
      */
     private void runGetAndSaveArticlesTask() {
 
+        // Si ya hay una tarea de obtencion de articulos corriendo no ejecuto una nueva!
         if (this.getSaveArticlesTask != null) {
             Toast.makeText(this, "Already downloading Articles ..", Toast.LENGTH_SHORT).show();
             return;
@@ -128,6 +131,7 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
         // Show little message
         Toast.makeText(this, "Downloading Articles ..", Toast.LENGTH_LONG).show();
 
+        // Inicio la tarea
         log.debug("Starting GetSaveArticlesTask ..");
         this.getSaveArticlesTask = new GetSaveArticlesTask(this);
         this.getSaveArticlesTask.execute();
@@ -137,7 +141,7 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
     /**
      * Aviso que se termino la obtencion de los {@link com.durrutia.dnews.model.Article}.
      *
-     * @param newsArticles
+     * @param newsArticles numero de articulos nuevos obtenidos.
      */
     @Override
     public void taskFinished(Integer newsArticles) {
@@ -159,6 +163,7 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
     @Override
     public void hearShake() {
 
+        // Vibro para indicar que se detecto el terremoto
         Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null) {
             vibrator.vibrate(150);
@@ -166,7 +171,6 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
 
         this.runGetAndSaveArticlesTask();
     }
-
 
 
 }

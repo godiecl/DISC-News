@@ -15,13 +15,15 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Tarea asincrona que obtiene las noticas desde internet.
+ *
  * @author Diego Urrutia Astorga
  */
 @Slf4j
 public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
 
     /**
-     *
+     * Listener de las tareas a terminar.
      */
     private TaskListener taskListener;
 
@@ -62,13 +64,16 @@ public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
 
             final ModelAdapter<Article> modelAdapter = FlowManager.getModelAdapter(Article.class);
 
+            // Contador de nuevas noticias
             int saved = 0;
             for (final Article article : articles) {
 
+                // Si la noticia ya existe, no es necesario almacenar nada.
                 if (modelAdapter.exists(article)) {
                     continue;
                 }
 
+                // Inserto en la base de datos y cuento 1 mas.
                 modelAdapter.insert(article);
                 saved++;
 
@@ -78,6 +83,7 @@ public final class GetSaveArticlesTask extends AsyncTask<Void, Void, Integer> {
             return saved;
 
             /*
+            // Version mas rapida de almacenaje, pero sin contar las inserciones.
             FastStoreModelTransaction<Article> fastStoreModelTransaction = FastStoreModelTransaction.saveBuilder(FlowManager.getModelAdapter(Article.class))
                     .addAll(articles).build();
 
