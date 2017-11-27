@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DISC News</string>
+    <string name="menu_reload">Reload</string>
 </resources>
