@@ -6,6 +6,7 @@
 
 package com.durrutia.dnews.activities;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -54,6 +55,16 @@ public final class MainActivity extends ListActivity implements GetSaveArticlesT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Mostrar la barrita
+        final ActionBar actionBar = super.getActionBar();
+        if (actionBar != null) {
+            // actionBar.setLogo(R.drawable.ic_launcher_foreground);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.show();
+        }
 
         // Row division
         int[] colors = {0, 0xFFFF0000, 0};

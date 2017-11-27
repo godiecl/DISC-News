@@ -40,6 +40,7 @@ public final class App extends Application {
             // Pipeline config
             final ImagePipelineConfig imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
                     .setDownsampleEnabled(true)
+                    .setResizeAndRotateEnabledForNetwork(true)
                     .build();
 
             // Initialize Fresco

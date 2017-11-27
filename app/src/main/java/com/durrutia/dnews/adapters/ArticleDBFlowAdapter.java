@@ -11,11 +11,15 @@ import com.durrutia.dnews.R;
 import com.durrutia.dnews.model.Article;
 import com.durrutia.dnews.model.Article_Table;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.raizlabs.android.dbflow.StringUtils;
 import com.raizlabs.android.dbflow.list.FlowCursorList;
 import com.raizlabs.android.dbflow.sql.language.OrderBy;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Collections;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +46,11 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
     private final Context context;
 
     /**
+     * OnClick over image
+     */
+    private final View.OnClickListener onClickListener;
+
+    /**
      *
      * @param context to get the {@link LayoutInflater}.
      */
@@ -49,13 +58,26 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
 
         this.context = context;
 
+        // SQL to get data
         this.flowCursorList = new FlowCursorList.Builder<>(
                 SQLite.select()
                         .from(Article.class)
                         .orderBy(OrderBy.fromProperty(Article_Table.publishedAt))
         ).build();
 
+        // Data in the backend
         log.debug("Size: {}", this.flowCursorList.getCount());
+
+        // Listener onClickImage
+        this.onClickListener = v -> {
+            final String url = (String) v.getTag();
+            log.debug("Using url: {}", url);
+            if (!StringUtils.isNullOrEmpty(url)) {
+                new ImageViewer.Builder<>(context, Collections.singletonList(url))
+                        .hideStatusBar(false)
+                        .show();
+            }
+        };
 
     }
 
@@ -137,6 +159,10 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.row_article, parent, false);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
+
+            // Adding OnClickListener
+            viewHolder.image.setOnClickListener(this.onClickListener);
+
         } else {
             view = convertView;
             viewHolder = (ViewHolder) convertView.getTag();
@@ -153,6 +179,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
             viewHolder.uuid.setText(article.getId().toString());
 
             viewHolder.image.setImageURI(article.getUrlToImage());
+            viewHolder.image.setTag(article.getUrlToImage());
 
         }
 
@@ -162,6 +189,7 @@ public final class ArticleDBFlowAdapter extends BaseAdapter {
     /**
      * Viewholder pattern
      */
+    @Slf4j
     private static class ViewHolder {
 
         TextView title;
