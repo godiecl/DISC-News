@@ -8,10 +8,12 @@ logger.lifecycle("Using Buildtime: ${BUILD_DATE_TIME}")
 // Aegaeon, Aegir, Albiorix, Anthe, Atlas, Bebhionn, Bergelmir, Bestla, Calypso, Daphnis, Dione ..
 def VERSION_NAME = "Aegaeon"
 
+apply plugin: 'com.github.ben-manes.versions'
+
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "com.durrutia.dnews"
@@ -80,15 +82,15 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Simple Logging Facade 4 Java
     implementation 'org.slf4j:slf4j-api:1.7.25'
 
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    // androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    // androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.8.0'
@@ -126,7 +128,7 @@ dependencies {
 
     // Process image
     implementation 'com.facebook.fresco:fresco:1.5.0'
-    implementation 'com.android.support:support-core-utils:26.1.0'
+    // implementation 'com.android.support:support-core-utils:27.0.2'
     implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
 
     // DBFLow
